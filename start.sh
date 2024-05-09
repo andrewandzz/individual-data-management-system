@@ -1,3 +1,2 @@
-cd ./IndividualDataManagementSystem/
 printf '\e[8;30;175t'
-dotnet run
+dotnet run --project ./IndividualDataManagementSystem/IndividualDataManagementSystem.csproj

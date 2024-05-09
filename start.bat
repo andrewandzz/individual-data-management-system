@@ -2,7 +2,6 @@
 
 mode CON: cols=175 lines=30
 
-cd .\IndividualDataManagementSystem\
-dotnet run
+dotnet run --project .\IndividualDataManagementSystem\IndividualDataManagementSystem.csproj
 
 pause
