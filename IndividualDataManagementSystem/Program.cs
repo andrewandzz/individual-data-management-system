@@ -48,7 +48,7 @@ class Program
                 }
             }
 
-            PrintErrorMessage("Некоректно вибрана опція. Повторіть введення.");
+            PrintRedMessage("Некоректно вибрана опція. Повторіть введення.");
         }
     }
 
@@ -137,7 +137,7 @@ class Program
         }
         catch (ArgumentException exception)
         {
-            PrintErrorMessage($"{exception.Message} Повторіть введення.");
+            PrintRedMessage($"{exception.Message} Повторіть введення.");
         }
     }
 
@@ -179,7 +179,7 @@ class Program
         }
         catch (ArgumentException exception)
         {
-            PrintErrorMessage($"{exception.Message} Повторіть введення.");
+            PrintRedMessage($"{exception.Message} Повторіть введення.");
         }
     }
 
@@ -191,12 +191,14 @@ class Program
 
         var id = InputReader.ReadId("Введіть ID фізичної особи для видалення:");
 
-        individualDao.RemoveById(id);
-
-        Console.WriteLine("Фізичну особу успішно видалено.");
+        if (InputReader.ReadConfirmation("Дані про фізичну особу будуть втрачені. Ви впевнені? Введіть \"т\" або \"н\":"))
+        {
+            individualDao.RemoveById(id);
+            Console.WriteLine("Фізичну особу успішно видалено.");
+        }
     }
 
-    static void PrintErrorMessage(string message)
+    static void PrintRedMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine(message);

@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 public static class InputReader
 {
@@ -25,7 +26,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -49,7 +50,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -73,7 +74,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -97,7 +98,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -121,7 +122,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -145,7 +146,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -169,7 +170,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -193,7 +194,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -217,7 +218,7 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
@@ -241,14 +242,45 @@ public static class InputReader
             }
             catch (ArgumentException exception)
             {
-                PrintErrorMessage($"{exception.Message} Спробуйте ще раз.");
+                PrintRedMessage($"{exception.Message} Спробуйте ще раз.");
             }
         }
     }
 
-    private static void PrintErrorMessage(string message)
+    public static bool ReadConfirmation(string message)
+    {
+        var pattern = @"^(т|н)$";
+
+        while (true)
+        {
+            PrintYellowMessage(message);
+
+            string input = Console.ReadLine();
+
+            if (!Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase))
+            {
+                PrintRedMessage("Некоректне введення. Спробуйте ще раз.");
+                continue;
+            }
+
+            return input.ToLower() switch
+            {
+                "т" => true,
+                _ => false
+            };
+        }
+    }
+
+    private static void PrintRedMessage(string message)
     {
         Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(message);
+        Console.ResetColor();
+    }
+
+    private static void PrintYellowMessage(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(message);
         Console.ResetColor();
     }
