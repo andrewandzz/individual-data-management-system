@@ -6,25 +6,30 @@ using System.Text.RegularExpressions;
 [Table("individuals")]
 public class Individual
 {
+    private const int NameMinLength = 2;
+    private const int NameMaxLength = 16;
+    private const int AddressMinLength = 2;
+    private const int AddressMaxLength = 40;
+
     [Required]
     [Column("id")]
     public int Id { get; set; }
 
     [Required]
-    [MinLength(2)]
-    [MaxLength(16)]
+    [MinLength(NameMinLength)]
+    [MaxLength(NameMaxLength)]
     [Column("last_name")]
     public string LastName { get; set; }
 
     [Required]
-    [MinLength(2)]
-    [MaxLength(16)]
+    [MinLength(NameMinLength)]
+    [MaxLength(NameMaxLength)]
     [Column("first_name")]
     public string FirstName { get; set; }
 
     [Required]
-    [MinLength(2)]
-    [MaxLength(16)]
+    [MinLength(NameMinLength)]
+    [MaxLength(NameMaxLength)]
     [Column("middle_name")]
     public string MiddleName { get; set; }
 
@@ -38,8 +43,8 @@ public class Individual
     public Gender Gender { get; set; }
 
     [Required]
-    [MinLength(2)]
-    [MaxLength(32)]
+    [MinLength(AddressMinLength)]
+    [MaxLength(AddressMaxLength)]
     [Column("address")]
     public string Address { get; set; }
 
@@ -67,9 +72,9 @@ public class Individual
 
     public static string ValidateLastName(string input)
     {
-        if (input.Length < 2 || input.Length > 16)
+        if (input.Length < NameMinLength || input.Length > NameMaxLength)
         {
-            throw new ArgumentException("Прізвище має бути від 2 до 16 символів.");
+            throw new ArgumentException($"Прізвище має бути від {NameMinLength} до {NameMaxLength} символів.");
         }
 
         return input;
@@ -77,9 +82,9 @@ public class Individual
 
     public static string ValidateFirstName(string input)
     {
-        if (input.Length < 2 || input.Length > 16)
+        if (input.Length < NameMinLength || input.Length > NameMaxLength)
         {
-            throw new ArgumentException("Імʼя має бути від 2 до 16 символів.");
+            throw new ArgumentException($"Імʼя має бути від {NameMinLength} до {NameMaxLength} символів.");
         }
 
         return input;
@@ -87,9 +92,9 @@ public class Individual
 
     public static string ValidateMiddleName(string input)
     {
-        if (input.Length < 2 || input.Length > 16)
+        if (input.Length < NameMinLength || input.Length > NameMaxLength)
         {
-            throw new ArgumentException("По батькові має бути від 2 до 16 символів.");
+            throw new ArgumentException($"По батькові має бути від {NameMinLength} до {NameMaxLength} символів.");
         }
 
         return input;
@@ -154,9 +159,9 @@ public class Individual
 
     public static string ValidateAddress(string input)
     {
-        if (input.Length < 2 || input.Length > 64)
+        if (input.Length < AddressMinLength || input.Length > AddressMaxLength)
         {
-            throw new ArgumentException("Адреса має бути від 2 до 64 символів.");
+            throw new ArgumentException($"Адреса має бути від {AddressMinLength} до {AddressMaxLength} символів.");
         }
 
         return input;

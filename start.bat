@@ -1,6 +1,6 @@
 @echo OFF
 
-mode CON: cols=175 lines=30
+mode CON: cols=180 lines=30
 
 dotnet run --project .\IndividualDataManagementSystem\IndividualDataManagementSystem.csproj
 

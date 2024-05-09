@@ -76,11 +76,11 @@ class Program
 
         Console.WriteLine();
 
-        var horizontalLine = "|----|------------------|------------------|------------------|-----------------|-------|----------------------------------|----------------|----------------|------------|";
+        var horizontalLine = "|----|------------------|------------------|------------------|-----------------|-------|------------------------------------------|----------------|----------------|------------|";
 
         Console.WriteLine(horizontalLine);
 
-        Console.WriteLine("| ID |     Прізвище     |       Імʼя       |   По батькові    | Дата народження | Стать |        Адреса реєстрації         | Номер телефону | Номер паспорта |    ІПН     |");
+        Console.WriteLine("| ID |     Прізвище     |       Імʼя       |   По батькові    | Дата народження | Стать |            Адреса реєстрації             | Номер телефону | Номер паспорта |    ІПН     |");
 
         Console.WriteLine(horizontalLine);
 
@@ -92,7 +92,7 @@ class Program
             var passportNumber = !string.IsNullOrEmpty(individual.PassportNumber) ? individual.PassportNumber : "-";
             var taxNumber = !string.IsNullOrEmpty(individual.TaxNumber) ? individual.TaxNumber : "-";
 
-            Console.WriteLine("| {0,2} | {1,-16} | {2,-16} | {3,-16} | {4,15} |   {5,-2}  | {6,-32} | {7,14} | {8,-14} | {9,10} |",
+            Console.WriteLine("| {0,2} | {1,-16} | {2,-16} | {3,-16} | {4,15} |   {5,-2}  | {6,-40} | {7,14} | {8,-14} | {9,10} |",
                 individual.Id,
                 individual.LastName,
                 individual.FirstName,
@@ -109,7 +109,7 @@ class Program
 
         if (includeSummary)
         {
-            Console.WriteLine("|                                                                                                                          | {0,31} | {1,10} |",
+            Console.WriteLine("|                                                                                                                                  | {0,31} | {1,10} |",
                 "ВСЬОГО ФІЗИЧНИХ ОСІБ:",
                 individuals.Count());
 
