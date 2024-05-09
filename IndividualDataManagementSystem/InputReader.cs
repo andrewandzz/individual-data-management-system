@@ -3,13 +3,18 @@ using System.Text.RegularExpressions;
 
 public static class InputReader
 {
-    public static int ReadId(string message)
+    public static int? ReadId(string message, bool allowEmpty = false)
     {
         while (true)
         {
             Console.WriteLine(message);
 
             string input = Console.ReadLine();
+
+            if (allowEmpty && string.IsNullOrEmpty(input))
+            {
+                return null;
+            }
 
             try
             {

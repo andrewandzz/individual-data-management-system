@@ -162,11 +162,24 @@ class Program
     {
         using var individualDao = new IndividualDao();
 
-        PrintIndividualsData(individualDao.GetAll());
+        var individuals = individualDao.GetAll();
 
-        var id = InputReader.ReadId("Введіть ID фізичної особи для редагування:");
+        if (!individuals.Any())
+        {
+            Console.WriteLine("Немає фізичнних осіб.\n");
+            return;
+        }
 
-        var individual = individualDao.GetById(id);
+        PrintIndividualsData(individuals);
+
+        var id = InputReader.ReadId("Введіть ID фізичної особи для редагування (або натисніть Enter, щоб повернутися назад):", allowEmpty: true);
+
+        if (id == null)
+        {
+            return;
+        }
+
+        var individual = individualDao.GetById((int)id);
 
         var newLastName = InputReader.ReadLastName("Введіть нове прізвище (або натисніть Enter, щоб пропустити):", allowEmpty: true);
         var newFirstName = InputReader.ReadFirstName("Введіть нове імʼя (або натисніть Enter, щоб пропустити):", allowEmpty: true);
@@ -204,13 +217,26 @@ class Program
     {
         using var individualDao = new IndividualDao();
 
-        PrintIndividualsData(individualDao.GetAll());
+        var individuals = individualDao.GetAll();
 
-        var id = InputReader.ReadId("Введіть ID фізичної особи для видалення:");
-
-        if (InputReader.ReadConfirmation("Дані про фізичну особу будуть втрачені. Ви впевнені? Введіть \"т\" або \"н\":"))
+        if (!individuals.Any())
         {
-            individualDao.RemoveById(id);
+            Console.WriteLine("Немає фізичнних осіб.\n");
+            return;
+        }
+
+        PrintIndividualsData(individuals);
+
+        var id = InputReader.ReadId("Введіть ID фізичної особи для видалення (або натисніть Enter, щоб повернутися назад):", allowEmpty: true);
+
+        if (id == null)
+        {
+            return;
+        }
+
+        if (InputReader.ReadConfirmation("Дані про фізичну особу будуть втрачені. Ви впевнені? Введіть \"т\", щоб підтвердити, або \"н\", щоб скасувати:"))
+        {
+            individualDao.RemoveById((int)id);
             Console.WriteLine("Фізичну особу успішно видалено.\n");
         }
     }
