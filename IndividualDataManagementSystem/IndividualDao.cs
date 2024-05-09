@@ -62,22 +62,8 @@ public class IndividualDao : IDisposable
         _context.SaveChanges();
     }
 
-    private bool _disposedValue;
-
-    ~IndividualDao() => PrivateDispose();
-
     public void Dispose()
     {
-        PrivateDispose();
-        GC.SuppressFinalize(this);
-    }
-
-    private void PrivateDispose()
-    {
-        if (!_disposedValue)
-        {
-            _context.Dispose();
-            _disposedValue = true;
-        }
+        _context.Dispose();
     }
 }
