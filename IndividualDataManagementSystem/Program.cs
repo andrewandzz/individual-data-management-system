@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 class Program
 {
     static void Main()
     {
+        PrintInto();
         MailMenu();
     }
 
@@ -27,23 +29,19 @@ class Program
                 switch (option)
                 {
                     case 0:
-                        // PrintOutro();
+                        PrintOutro();
                         return;
                     case 1:
                         PrintIndividualsData();
-                        // PrintContinuePrompt();
                         continue;
                     case 2:
                         AddIndividualData();
-                        // PrintContinuePrompt();
                         continue;
                     case 3:
                         EditIndividualData();
-                        // PrintContinuePrompt();
                         continue;
                     case 4:
                         DeleteIndividualData();
-                        // PrintContinuePrompt();
                         continue;
                 }
             }
@@ -52,15 +50,25 @@ class Program
         }
     }
 
+    static void PrintInto()
+    {
+        Console.WriteLine("Дана програма призначена для роботи з даними про фізичних осіб.\n");
+    }
+
+    static void PrintOutro()
+    {
+        Console.WriteLine("Дякуємо за користування програмою.");
+    }
+
     static void PrintIndividualsData()
     {
         using var individualDao = new IndividualDao();
         var individuals = individualDao.GetAll();
 
-        PrintIndividualsData(individuals);
+        PrintIndividualsData(individuals, includeSummary: true);
     }
 
-    static void PrintIndividualsData(IEnumerable<Individual> individuals)
+    static void PrintIndividualsData(IEnumerable<Individual> individuals, bool includeSummary = false)
     {
         Console.WriteLine();
 
@@ -99,6 +107,15 @@ class Program
             Console.WriteLine(horizontalLine);
         }
 
+        if (includeSummary)
+        {
+            Console.WriteLine("|                                                                                                                          | {0,31} | {1,10} |",
+                "ВСЬОГО ФІЗИЧНИХ ОСІБ:",
+                individuals.Count());
+
+            Console.WriteLine(horizontalLine);
+        }
+
         Console.WriteLine();
     }
 
@@ -133,7 +150,7 @@ class Program
         {
             individualDao.Add(individual);
 
-            Console.WriteLine("Фізичну особу успішно додано.");
+            Console.WriteLine("Фізичну особу успішно додано.\n");
         }
         catch (ArgumentException exception)
         {
@@ -175,7 +192,7 @@ class Program
         {
             individualDao.Update(individual);
 
-            Console.WriteLine("Дані про фізичну особу успішно оновлено.");
+            Console.WriteLine("Дані про фізичну особу успішно оновлено.\n");
         }
         catch (ArgumentException exception)
         {
@@ -194,7 +211,7 @@ class Program
         if (InputReader.ReadConfirmation("Дані про фізичну особу будуть втрачені. Ви впевнені? Введіть \"т\" або \"н\":"))
         {
             individualDao.RemoveById(id);
-            Console.WriteLine("Фізичну особу успішно видалено.");
+            Console.WriteLine("Фізичну особу успішно видалено.\n");
         }
     }
 
