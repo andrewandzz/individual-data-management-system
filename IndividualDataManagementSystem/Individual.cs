@@ -11,6 +11,7 @@ public class Individual
     private const int AddressMinLength = 2;
     private const int AddressMaxLength = 40;
 
+    [Key]
     [Required]
     [Column("id")]
     public int Id { get; set; }

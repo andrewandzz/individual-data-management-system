@@ -13,6 +13,11 @@ public class IndividualDao : IDisposable
         return _context.Individuals.Any(individual => individual.Id == id);
     }
 
+    public bool Any()
+    {
+        return _context.Individuals.Any();
+    }
+
     public IEnumerable<Individual> GetAll()
     {
         return _context.Individuals.AsEnumerable();
@@ -32,7 +37,7 @@ public class IndividualDao : IDisposable
         }
         catch (DbUpdateException exception)
         {
-            if (((SqliteException)exception.InnerException).SqliteErrorCode == 19) // UNIQUE constraint SQLite error code
+            if (((SqliteException)exception.InnerException).SqliteErrorCode == 19) // UNIQUE constraint
             {
                 throw new ArgumentException("Фізична особа з таким номером телефона / номером паспорта / ІПН вже існує.");
             }
@@ -48,7 +53,7 @@ public class IndividualDao : IDisposable
         }
         catch (DbUpdateException exception)
         {
-            if (((SqliteException)exception.InnerException).SqliteErrorCode == 19) // UNIQUE constraint SQLite error code
+            if (((SqliteException)exception.InnerException).SqliteErrorCode == 19) // UNIQUE constraint
             {
                 throw new ArgumentException("Фізична особа з таким номером телефона / номером паспорта / ІПН вже існує.");
             }

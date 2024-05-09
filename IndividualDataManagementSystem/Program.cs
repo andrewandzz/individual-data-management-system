@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 class Program
 {
@@ -12,6 +10,8 @@ class Program
 
     static void MailMenu()
     {
+        using var individualRegistry = new IndividualRegistry();
+
         while (true)
         {
             Console.WriteLine("Введіть номер опції:");
@@ -32,16 +32,16 @@ class Program
                         PrintOutro();
                         return;
                     case 1:
-                        PrintIndividualsData();
+                        PrintIndividualsData(individualRegistry);
                         continue;
                     case 2:
-                        AddIndividualData();
+                        AddIndividualData(individualRegistry);
                         continue;
                     case 3:
-                        EditIndividualData();
+                        EditIndividualData(individualRegistry);
                         continue;
                     case 4:
-                        DeleteIndividualData();
+                        DeleteIndividualData(individualRegistry);
                         continue;
                 }
             }
@@ -60,66 +60,12 @@ class Program
         Console.WriteLine("Дякуємо за користування програмою.");
     }
 
-    static void PrintIndividualsData()
+    static void PrintIndividualsData(IndividualRegistry individualRegistry)
     {
-        using var individualDao = new IndividualDao();
-        var individuals = individualDao.GetAll();
-
-        PrintIndividualsData(individuals, includeSummary: true);
+        individualRegistry.PrintTable(includeSummary: true);
     }
 
-    static void PrintIndividualsData(IEnumerable<Individual> individuals, bool includeSummary = false)
-    {
-        Console.WriteLine();
-
-        Console.WriteLine("                                                                               ФІЗИЧНІ ОСОБИ                                                                               ");
-
-        Console.WriteLine();
-
-        var horizontalLine = "|----|------------------|------------------|------------------|-----------------|-------|------------------------------------------|----------------|----------------|------------|";
-
-        Console.WriteLine(horizontalLine);
-
-        Console.WriteLine("| ID |     Прізвище     |       Імʼя       |   По батькові    | Дата народження | Стать |            Адреса реєстрації             | Номер телефону | Номер паспорта |    ІПН     |");
-
-        Console.WriteLine(horizontalLine);
-
-        foreach (var individual in individuals)
-        {
-            var dateOfBirth = Individual.FormatDateOfBirth(individual.DateOfBirth);
-            var gender = Individual.GenderToLetter(individual.Gender);
-            var phoneNumber = !string.IsNullOrEmpty(individual.PhoneNumber) ? individual.PhoneNumber : "-";
-            var passportNumber = !string.IsNullOrEmpty(individual.PassportNumber) ? individual.PassportNumber : "-";
-            var taxNumber = !string.IsNullOrEmpty(individual.TaxNumber) ? individual.TaxNumber : "-";
-
-            Console.WriteLine("| {0,2} | {1,-16} | {2,-16} | {3,-16} | {4,15} |   {5,-2}  | {6,-40} | {7,14} | {8,-14} | {9,10} |",
-                individual.Id,
-                individual.LastName,
-                individual.FirstName,
-                individual.MiddleName,
-                dateOfBirth,
-                gender,
-                individual.Address,
-                phoneNumber,
-                passportNumber,
-                taxNumber);
-
-            Console.WriteLine(horizontalLine);
-        }
-
-        if (includeSummary)
-        {
-            Console.WriteLine("|                                                                                                                                  | {0,31} | {1,10} |",
-                "ВСЬОГО ФІЗИЧНИХ ОСІБ:",
-                individuals.Count());
-
-            Console.WriteLine(horizontalLine);
-        }
-
-        Console.WriteLine();
-    }
-
-    static void AddIndividualData()
+    static void AddIndividualData(IndividualRegistry individualRegistry)
     {
         var lastName = InputReader.ReadLastName("Введіть прізвище:");
         var firstName = InputReader.ReadFirstName("Введіть імʼя:");
@@ -144,12 +90,9 @@ class Program
             TaxNumber = taxNumber,
         };
 
-        using var individualDao = new IndividualDao();
-
         try
         {
-            individualDao.Add(individual);
-
+            individualRegistry.Add(individual);
             Console.WriteLine("Фізичну особу успішно додано.\n");
         }
         catch (ArgumentException exception)
@@ -158,19 +101,15 @@ class Program
         }
     }
 
-    static void EditIndividualData()
+    static void EditIndividualData(IndividualRegistry individualRegistry)
     {
-        using var individualDao = new IndividualDao();
-
-        var individuals = individualDao.GetAll();
-
-        if (!individuals.Any())
+        if (!individualRegistry.Any())
         {
             Console.WriteLine("Немає фізичнних осіб.\n");
             return;
         }
 
-        PrintIndividualsData(individuals);
+        individualRegistry.PrintTable();
 
         var id = InputReader.ReadId("Введіть ID фізичної особи для редагування (або натисніть Enter, щоб повернутися назад):", allowEmpty: true);
 
@@ -179,7 +118,7 @@ class Program
             return;
         }
 
-        var individual = individualDao.GetById((int)id);
+        var individual = individualRegistry.GetById((int)id);
 
         var newLastName = InputReader.ReadLastName("Введіть нове прізвище (або натисніть Enter, щоб пропустити):", allowEmpty: true);
         var newFirstName = InputReader.ReadFirstName("Введіть нове імʼя (або натисніть Enter, щоб пропустити):", allowEmpty: true);
@@ -203,8 +142,7 @@ class Program
 
         try
         {
-            individualDao.Update(individual);
-
+            individualRegistry.Update(individual);
             Console.WriteLine("Дані про фізичну особу успішно оновлено.\n");
         }
         catch (ArgumentException exception)
@@ -213,19 +151,15 @@ class Program
         }
     }
 
-    static void DeleteIndividualData()
+    static void DeleteIndividualData(IndividualRegistry individualRegistry)
     {
-        using var individualDao = new IndividualDao();
-
-        var individuals = individualDao.GetAll();
-
-        if (!individuals.Any())
+        if (!individualRegistry.Any())
         {
             Console.WriteLine("Немає фізичнних осіб.\n");
             return;
         }
 
-        PrintIndividualsData(individuals);
+        individualRegistry.PrintTable();
 
         var id = InputReader.ReadId("Введіть ID фізичної особи для видалення (або натисніть Enter, щоб повернутися назад):", allowEmpty: true);
 
@@ -236,7 +170,7 @@ class Program
 
         if (InputReader.ReadConfirmation("Дані про фізичну особу будуть втрачені. Ви впевнені? Введіть \"т\", щоб підтвердити, або \"н\", щоб скасувати:"))
         {
-            individualDao.RemoveById((int)id);
+            individualRegistry.RemoveById((int)id);
             Console.WriteLine("Фізичну особу успішно видалено.\n");
         }
     }
