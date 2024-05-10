@@ -1,9 +1,18 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Text;
 
 class Program
 {
     static void Main()
     {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            // Fix encoding for Windows
+            Console.InputEncoding = Encoding.Unicode;
+            Console.OutputEncoding = Encoding.Unicode;
+        }
+
         PrintInto();
         MailMenu();
     }
